@@ -3,8 +3,7 @@ from django.shortcuts import render
 from . import util
 
 from markdown2 import Markdown
-
-mark = Markdown()
+markdowner = Markdown()
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -12,10 +11,15 @@ def index(request):
     })
 
 def page_direct(request, title):
-
-    page_entry = util.get_entry(title)
     
-    return render(request, "encyclopedia/entries_page.html", {
-        'page': mark.cover(page_entry),
-        'title': title,
-    })
+    if title in util.list_entries():
+        page_entry = util.get_entry(title)
+        page = markdowner.convert(page_entry)
+
+        return render(request, "encyclopedia/entries_page.html", {
+            'page_entry': page,
+            'title': title
+        })
+    else:
+        return render(request, "enclopedia/error_page.html")
+
