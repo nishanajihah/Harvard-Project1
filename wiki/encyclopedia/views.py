@@ -1,66 +1,25 @@
-from typing import Reversible
+from django.http import HttpResponseRedirect
+from django import forms
 from django.http.response import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.urls import reverse
 
 from . import util
 
 from markdown2 import Markdown
 markdowner = Markdown()
 
-# class Search(forms.Form):
-#     title = forms.CharField(widget=forms.TextInput(
-#         attrs={
-#             'class' : 'search', 
-#             'placeholder': 'Search'
-#         }))
+class searchForm (forms.Form):
+    title = forms.CharField(label="", widget=forms.TextInput(attrs={
+      "class": "search",
+      "placeholder": "Search Encyclopedia"}))
 
 def index(request):
 
-    entries = util.list_entries()
-   
-
     # Home
-#     if request.method == "POST":
-#         form = Search(request.POST)
-
-#         if form.is_valid():
-#             title = form.cleaned_data['title']
-#             md_file = util.get_entry(title)
-
-#             if md_file:
-#                 convert_md = markdowner.convert(md_file)
-
-#                 page_content = {
-#                     'title': title,
-#                     'page': convert_md,
-#                     'form': Search()
-#                 }
-
-#                 return render(request, "encyclopedia/index.html", page_content)
-
-#             if title.lower():
-#                 searching.append(title)
-#                 page_content = {
-#                     'searching': searching;
-#                     'form': Search()
-#                 }
-
-#             return render(request, "encyclopedia/search.html", page_content)
-#         else:
-
-#             show_related_titles = util.related_titles(title)
-
-#             page_content = {
-#                 'title': title,
-#                 'show_related_titles': show_related_titles ,
-#                 'form': Search()
-#             }
-# 
-#             return render(request, "encyclopedia/search_page.html", page_content)
-
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries(),
-        "form": Search()
+        # "search_form" : searchForm()    
     })
 
 def page(request, title):
@@ -86,18 +45,18 @@ def page(request, title):
 
 def search(request):
 
-     searching = []
+    entries = util.list_entries()
+    query = request.GET.get("q", "")
 
-    result = request.GET.get('q','')
-    if(util.get_entry(result) != None):
-        return HttpResponseRedirect(Reversible("page", kwargs={"page": result}))
-    else:
-        related_titles = util.related_titles(title)
+    # Query is exists
+    if query in entries:
+        return redirect(page, query)  
 
-        return render(request, "encyclopedia/search.html", {
-            "title": title,
-            "related_titles": related_titles,
-            "search_form": SearchForm()
-        })
+    results = [page for page in entries if query.lower() in page.lower()]
 
-    # return HttpResponseRedirect(Reversible('index'))
+    return render(request, "encyclopedia/search_page.html", {
+        "entries": results,
+    })
+
+
+    
