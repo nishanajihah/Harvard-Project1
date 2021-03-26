@@ -6,20 +6,29 @@ from markdown2 import Markdown
 markdowner = Markdown()
 
 def index(request):
+    # Home Page
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
     })
 
-def page_direct(request, title):
-    
-    if title in util.list_entries():
-        page_entry = util.get_entry(title)
-        page = markdowner.convert(page_entry)
+def page(request, title):
 
-        return render(request, "encyclopedia/entries_page.html", {
-            'page_entry': page,
-            'title': title
-        })
+    md_file = util.get_entry(title)
+    
+    if md_file != None:
+
+        # If page exist convert md file to html and display
+        convert_md = markdowner.convert(md_file)
+
+        page_content = {
+            'title': title,
+            'page': convert_md
+        }
+
+        return render(request, "encyclopedia/entry_page.html", page_content)
     else:
-        return render(request, "enclopedia/error_page.html")
+        # if it does not exist diplay the error message
+        return render(request, "encyclopedia/error_page.html", {
+            "message": f"Error: '{title}' page does not exist."
+        })
 
