@@ -52,13 +52,16 @@ def search(request):
     entries = util.list_entries()
     title = request.GET.get("q", "")
 
+    # If the title search exist it show the content
     if util.get_entry(title) != None: 
 
         return render(request, "encyclopedia/entry_page.html", {
             'title': title,
             'page': markdowner.convert(util.get_entry(title)),
         })
-        
+    
+    # else if when the search are short form like "py" or "o". T
+    # Then it will show the list of the exist file
     elif util.get_entry(title) == None:
 
         if title in entries:
@@ -69,6 +72,7 @@ def search(request):
             "entries": results,
         })
 
+    # Else it will show a message 
     else:
         # if it does not exist diplay the error message
         return render(request, "encyclopedia/error_page.html", {

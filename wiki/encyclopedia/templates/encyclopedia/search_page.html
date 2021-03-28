@@ -8,12 +8,9 @@
 
     <h3>Search Results: {{title}}</h3> 
 
-    <!-- <li><a href="{% url 'enc:page' title=title %}">{{ title }}</a></li> -->
-        
-
-    {% if entries %}
+    {% if result %}
     <ul>
-        {% for entry in entries %}
+        {% for title in entries %}
             <li><a href="{% url 'enc:page' title=title %}">{{ title }}</a></li>
         {% endfor %}
     </ul>
