@@ -50,27 +50,41 @@ def page(request, title):
 def search(request):
 
     entries = util.list_entries()
-    search = []
-    query = request.GET.get("q", "")
+    title = request.GET.get("q", "")
 
-    if query in entries:
-        md_file = util.get_entry(query)
-        convert_md = markdowner.convert(md_file)
+    if util.get_entry(title) != None: 
 
-        page_content = {
-            'title': query,
-            'page': convert_md,
-        }
+        return render(request, "encyclopedia/entry_page.html", {
+            'title': title,
+            'page': markdowner.convert(util.get_entry(title)),
+        })
+        
+    elif util.get_entry(title) == None:
 
-        return render(request, "enc:page", page_content)  
+        if title in entries:
+            return redirect(reverse('page', title))
+
+        results = [page for page in entries if 'title'.lower() in page.lower()]
+        return render(request, "encyclopedia/search_page.html", {
+            "entries": results,
+        })
+
+    else:
+        # if it does not exist diplay the error message
+        return render(request, "encyclopedia/error_page.html", {
+            "message": f"Error: '{title}' page was not found."
+        })
+
+            
+        # return render(request, "enc:page", page_content) 
     
-    if query != entries:
-        return redirect(page, query)
+    # if title in entries:
+    #     return redirect(page, query)
 
-    results = [page for page in entries if query.lower() in page.lower()]
-    return render(request, "encyclopedia/search_page.html", {
-        "entries": results,
-    })
+    # results = [page for page in entries if query.lower() in page.lower()]
+    # return render(request, "encyclopedia/search_page.html", {
+    #     "entries": results,
+    # })
   
 
     
