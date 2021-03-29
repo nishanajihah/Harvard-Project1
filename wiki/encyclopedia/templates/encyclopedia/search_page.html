@@ -15,16 +15,5 @@
             <li><a href="{% url 'enc:page' title=title %}">{{ title }}</a></li>
         {% endfor %}
     </ul>
-        
-
-    <!-- {% if title in entries %}  
-        {{title}}
-    {% else %}
-        <h2>{{message}}</h2>
-        <p>Here the available articles for the search:</p>
-        {% for title in entries %}
-            <li><a href="{% url 'enc:index' title=title %}">{{title}}</a></li>
-        {% endfor %}
-    {% endif %} -->
 
 {% endblock %}

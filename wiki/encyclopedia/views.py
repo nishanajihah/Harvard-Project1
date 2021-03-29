@@ -1,6 +1,5 @@
 from django.http import HttpResponseRedirect
 from django import forms
-from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
@@ -61,28 +60,14 @@ def search(request):
 
     # Else it will show an error message and  
     # it will show a list of the exist file that relate with the query insert in.
-    # else:
-    #     if title in entries:
-    #         return redirect(reverse('page', title))
+    else:
+        if title in entries:
+            return redirect(reverse('page', title))
 
-    #     results = [page for page in entries if 'title'.lower() in page.lower()]
-    #     return render(request, "encyclopedia/search_page.html", {
-    #         "entries": results,
-    #     })
-
-
-        # if it does not exist diplay the error message
-        # return render(request, "encyclopedia/error_page.html", {
-        #     "message": f"Error: '{title}' page was not found."
-        # })
-
-    if title in entries:
-        return redirect(page, title)
-
-    results = [page for page in entries if title.lower() in page.lower()]
-    return render(request, "encyclopedia/search_page.html", {
-        "entries": results,
-    })
+        results = [page for page in entries if title.lower() in page.lower()]
+        return render(request, "encyclopedia/search_page.html", {
+            "entries": results,
+        })
   
 
     
