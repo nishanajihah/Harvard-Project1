@@ -62,17 +62,18 @@ def search(request):
     
     # else if when the search are short form like "py" or "o". T
     # Then it will show the list of the exist file
-    elif util.get_entry(title) == None:
+    # elif util.get_entry(title) == None:
 
-        if title in entries:
-            return redirect(reverse('page', title))
+    #     if title in entries:
+    #         return redirect(reverse('page', title))
 
-        results = [page for page in entries if 'title'.lower() in page.lower()]
-        return render(request, "encyclopedia/search_page.html", {
-            "entries": results,
-        })
+    #     results = [page for page in entries if 'title'.lower() in page.lower()]
+    #     return render(request, "encyclopedia/search_page.html", {
+    #         "entries": results,
+    #     })
 
-    # Else it will show a message 
+    # Else it will show an error message and  
+    # it will show a list of the exist file that relate with the query insert in.
     else:
         # if it does not exist diplay the error message
         return render(request, "encyclopedia/error_page.html", {
