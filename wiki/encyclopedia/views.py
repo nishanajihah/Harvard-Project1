@@ -21,7 +21,6 @@ def index(request):
     # Home
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries(),
-        # "search_form" : searchForm()
     })
 
 
@@ -59,11 +58,10 @@ def search(request):
             'title': title,
             'page': markdowner.convert(util.get_entry(title)),
         })
-    
-    # else if when the search are short form like "py" or "o". T
-    # Then it will show the list of the exist file
-    # elif util.get_entry(title) == None:
 
+    # Else it will show an error message and  
+    # it will show a list of the exist file that relate with the query insert in.
+    # else:
     #     if title in entries:
     #         return redirect(reverse('page', title))
 
@@ -72,24 +70,19 @@ def search(request):
     #         "entries": results,
     #     })
 
-    # Else it will show an error message and  
-    # it will show a list of the exist file that relate with the query insert in.
-    else:
+
         # if it does not exist diplay the error message
-        return render(request, "encyclopedia/error_page.html", {
-            "message": f"Error: '{title}' page was not found."
-        })
+        # return render(request, "encyclopedia/error_page.html", {
+        #     "message": f"Error: '{title}' page was not found."
+        # })
 
-            
-        # return render(request, "enc:page", page_content) 
-    
-    # if title in entries:
-    #     return redirect(page, query)
+    if title in entries:
+        return redirect(page, title)
 
-    # results = [page for page in entries if query.lower() in page.lower()]
-    # return render(request, "encyclopedia/search_page.html", {
-    #     "entries": results,
-    # })
+    results = [page for page in entries if title.lower() in page.lower()]
+    return render(request, "encyclopedia/search_page.html", {
+        "entries": results,
+    })
   
 
     

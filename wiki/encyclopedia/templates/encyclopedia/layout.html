@@ -16,6 +16,7 @@
                 <!-- Search Bar -->
                 <form action="{% url 'enc:search' %}" method="GET">
                     {% csrf_token %}
+                    {{ form }}
                     <input class="search" type="text" name="q" placeholder="Search Encyclopedia">
                 </form>
 

@@ -6,26 +6,25 @@
 
 {% block body %}
 
-    <h3>Search Results: {{title}}</h3> 
+    <h3>Search Results for: {{ title }}</h3> 
+    <hr>
+    <p>Here the available articles for the search:</p>
 
-    {% if title == false %}
     <ul>
         {% for title in entries %}
             <li><a href="{% url 'enc:page' title=title %}">{{ title }}</a></li>
         {% endfor %}
     </ul>
-    {% endif %}
+        
 
-    {% if related_titles %}
-        <p>Related Entries:</p>
-            <ul>
-                {% for title in related_titles %}
-                    <li><a href="{% url 'entry' title=title %}">{{title}}</a></li>
-                {% endfor %}
-            </ul>
+    <!-- {% if title in entries %}  
+        {{title}}
     {% else %}
         <h2>{{message}}</h2>
-        <p>Check the <a href="{% url 'index' %}">index</a> page to see available articles.</p>
-        {% endif %}
+        <p>Here the available articles for the search:</p>
+        {% for title in entries %}
+            <li><a href="{% url 'enc:index' title=title %}">{{title}}</a></li>
+        {% endfor %}
+    {% endif %} -->
 
 {% endblock %}
