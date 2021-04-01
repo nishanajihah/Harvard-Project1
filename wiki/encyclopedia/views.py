@@ -9,10 +9,10 @@ from markdown2 import Markdown
 markdowner = Markdown()
 
 
-class searchForm (forms.Form):
-    title = forms.CharField(label="", widget=forms.TextInput(attrs={
-      "class": "search",
-      "placeholder": "Search Encyclopedia"}))
+# class searchForm (forms.Form):
+#     title = forms.CharField(label="", widget=forms.TextInput(attrs={
+#       "class": "search",
+#       "placeholder": "Search Encyclopedia"}))
 
 
 def index(request):
@@ -51,7 +51,7 @@ def search(request):
     title = request.GET.get("q", "")
 
     # If the title search exist it show the content
-    if util.get_entry(title) != None: 
+    if util.get_entry(title) !=  None: 
 
         return render(request, "encyclopedia/entry_page.html", {
             'title': title,

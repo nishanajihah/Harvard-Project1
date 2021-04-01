@@ -6,29 +6,15 @@
 
 {% block body %}
 
-<h3>Search Results for: "{{ title }}" </h3> 
+<h3>Search Results for: "{{ get.title }}" </h3> 
 <hr>
 
-{% if title in util.list_entries %}
-    <p>Here the available articles for the search:</p>
+    <p>Here's the available articles for the search:</p>
 
     <ul>
         {% for title in entries %}
             <li><a href="{% url 'enc:page' title=title %}">{{ title }}</a></li>
         {% endfor %}
     </ul>
-
-{% else %}
-
-    <p>Error: Page could not be found</p>
-    <p>Here the available articles for the search:</p>
-    <ul>
-        {% for entry in entries %}
-            <li><a href="{% url 'enc:page' title=entry %}">{{ entry }}</a></li>
-        {% endfor %}
-    </ul>
-
-{% endif %}
-
 
 {% endblock %}
