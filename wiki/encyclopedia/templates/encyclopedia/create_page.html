@@ -1,0 +1,17 @@
+{% extends "encyclopedia/layout.html"%}
+
+{% block title %}
+    Create Page
+{% endblock %}
+
+{% block body %}
+
+<!-- -->
+<form action="{% url 'enc:search' %}" method="POST">
+    {% csrf_token %}
+    {{ createForm }}
+    <input class="btn-save" type="submit" value="SAVE" name="save">
+</form>
+    
+
+{% endblock %}

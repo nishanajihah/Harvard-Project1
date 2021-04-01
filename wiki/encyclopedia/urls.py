@@ -8,5 +8,6 @@ app_name = "enc"
 urlpatterns = [
     path("", views.index, name="index"),
     path("wiki/<str:title>", views.page, name="page"),
-    path("search/", views.search, name="search")
+    path("search/", views.search, name="search"),
+    path("create/", views.create, name="create")
 ]

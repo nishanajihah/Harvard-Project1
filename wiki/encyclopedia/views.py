@@ -14,6 +14,14 @@ markdowner = Markdown()
 #       "class": "search",
 #       "placeholder": "Search Encyclopedia"}))
 
+class createForm(forms.Form):
+    # Create New Form
+    title = forms.CharField(label='', widget=forms.TextInput(attrs={
+        "placeholder": "The Page Title"}))
+    textarea = forms.CharField(label='', widget=forms.Textarea(attrs={
+        "placeholder": "Type in the content that follow the markdown format"
+    }))
+
 
 def index(request):
 
@@ -51,14 +59,14 @@ def search(request):
     title = request.GET.get("q", "")
 
     # If the title search exist it show the content
-    if util.get_entry(title) !=  None: 
+    if util.get_entry(title) != None:
 
         return render(request, "encyclopedia/entry_page.html", {
             'title': title,
             'page': markdowner.convert(util.get_entry(title)),
         })
 
-    # Else it will show an error message and  
+    # Else it will show an error message and
     # it will show a list of the exist file that relate with the query insert in.
     else:
         if title in entries:
@@ -68,14 +76,42 @@ def search(request):
         return render(request, "encyclopedia/search_page.html", {
             "entries": results,
         })
-  
 
-    
+def create(request):
 
-    
+  # If reached via link, display the form:
+    if request.method == "GET":
+        return render(request, "encyclopedia/create.html", {
+            "create_form": createForm(),
+            # "search_form": searchForm()
+        })
 
+    # Otherwise if reached by form submission:
+    elif request.method == "POST":
+        form = createForm(request.POST)
 
-   
+        # If form is valid, process the form:
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            texarea = form.cleaned_data['textarea']
+        else:
+            messages.error(request, 'Entry form not valid, please try again!')
+            return render(request, "encyclopedia/create.html", {
+                "create_form": form,
+                # "search_form": searchForm()
+            })
 
-
-    
+        # Check that title does not already exist:
+        if util.get_entry(title):
+            messages.error(
+                request, 'This page title already exists! Please go to that title page and edit it instead!')
+            return render(request, "encyclopedia/create.html", {
+                "create_form": form,
+                # "search_form": SearchForm()
+            })
+        # Otherwise save new title file to disk, take user to new page:
+        else:
+            util.save_entry(title, text)
+            messages.success(
+                request, f'New page "{title}" created successfully!')
+            return redirect(reverse('entry', args=[title]))
