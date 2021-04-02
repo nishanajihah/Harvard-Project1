@@ -14,7 +14,7 @@
                 <h2>Wiki</h2>
 
                 <!-- Search Bar -->
-                <form action="{% url 'enc:search' %}" method="GET">
+                <form action="{% url 'enc:search' %}" method="POST">
                     {% csrf_token %}
                     <input class="search" type="text" name="q" placeholder="Search Encyclopedia">
                 </form>

@@ -6,9 +6,10 @@
 
 {% block body %}
 
-<h3>Search Results for: "{{ get.title }}" </h3> 
+<h3>Search Results for: "{{ title }}" </h3> 
 <hr>
 
+{% if title in get_entry %}
     <p>Here's the available articles for the search:</p>
 
     <ul>
@@ -16,5 +17,18 @@
             <li><a href="{% url 'enc:page' title=title %}">{{ title }}</a></li>
         {% endfor %}
     </ul>
+    
+{% else %}
+    {{ message }}
+
+    <p>Here is all the available pages: </p>
+
+    <ul>
+        {% for entry in entries %}
+            <li><a href="{% url 'enc:page' title=entry %}">{{ entry }}</a></li>
+        {% endfor %}
+    </ul>
+
+{% endif %}
 
 {% endblock %}
