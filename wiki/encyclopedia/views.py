@@ -57,9 +57,9 @@ def page(request, title):
 def search(request):
 
     entries = util.list_entries()
-    title = request.GET.get("q")
+    title = request.POST.get("q")
 
-    if request.method == "GET":
+    if request.method == "POST":
 
         # If the title search exist it show the content
         if util.get_entry(title) != None:
@@ -77,13 +77,17 @@ def search(request):
 
             results = [page for page in entries if title.lower() in page.lower()]
             return render(request, "encyclopedia/search_page.html", {
-                "entries": results,
+                "title": title,
+                "entries": results
             })
     else:
         # if it does not exist diplay the error message
         return render(request, "encyclopedia/error_page.html", {
-            "message": f"Error: '{title}' page was not found."
+            "title": title,
+            "message": f"Error: '{title}' page was not found.",
+            "entries": util.get_entries
         })
+           
 
 
 def create(request):
